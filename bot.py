@@ -61,10 +61,9 @@ async def on_message(message):
 async def _quotes(ctx, id=None):
     if id:
         quote = Quote.find(int(id))
-        if quote:
-            await ctx.send(quote.quote)
-        else:
-            await ctx.send(f"quote: {id} does not exist", hidden=True)
+        response = quote.quote if quote else f"quote: {id} does not exist"
+        hidden = bool(not quote)
+        await ctx.send(response, hidden=hidden)
     else:
         choices = []
         for quote in Quote.all():
