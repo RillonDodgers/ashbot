@@ -50,13 +50,27 @@ async def on_message(message):
             await message.channel.send("They didn't cut my pizza O_O")
 
 
-@slash.slash(name="quotes", guild_ids=guild_ids())
-async def _quotes(ctx):
-    choices = []
-    for quote in Quote.all():
-        choices.append(quote.quote)
-    response = random.choice(choices)
-    await ctx.send(response)
+@slash.slash(name="quotes", guild_ids=guild_ids(), options=[
+    create_option(
+        name="id",
+        description="Specific quote ID: There are %s quotes" % len(Quote.all()),
+        option_type=4,
+        required=False
+    )
+])
+async def _quotes(ctx, id=None):
+    if id:
+        quote = Quote.find(int(id))
+        if quote:
+            await ctx.send(quote.quote)
+        else:
+            await ctx.send(f"quote: {id} does not exist", hidden=True)
+    else:
+        choices = []
+        for quote in Quote.all():
+            choices.append(quote.quote)
+        response = random.choice(choices)
+        await ctx.send(response)
 
 
 @slash.slash(name="magic-ashball", guild_ids=guild_ids())
