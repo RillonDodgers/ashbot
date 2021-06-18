@@ -45,6 +45,9 @@ async def on_message(message):
         """Skips if the sender is the bot"""
         return
 
+    if message.author.id == 108930426948620288 and message.content.lower() == "ashbot who is the coolest?":
+        await message.channel.send("You are!")
+
     if "pizza" in message.content.lower():
         if random.randint(1, 10) == 1:
             await message.channel.send("They didn't cut my pizza O_O")
